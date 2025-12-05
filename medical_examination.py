@@ -14,15 +14,15 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
-# 1. Import the data from medical_examination.csv and assign it to the df variable.
+# Importar  data 
 df = pd.read_csv('medical_examination.csv')
 
-# 2. Add an overweight column
+# se agrega columna de sobrepeso
 # BMI = weight (kg) / (height (m))^2
 bmi = df['weight'] / ((df['height'] / 100) ** 2)
 df['overweight'] = (bmi > 25).astype(int)
 
-# 3. Normalize data: if cholesterol or gluc == 1 -> 0 (good), else 1 (bad)
+#  Normalizar data
 df['cholesterol'] = (df['cholesterol'] > 1).astype(int)
 df['gluc'] = (df['gluc'] > 1).astype(int)
 
@@ -38,7 +38,7 @@ def draw_cat_plot():
         value_vars=['cholesterol', 'gluc', 'smoke', 'alco', 'active', 'overweight']
     )
 
-    # 6. Group and reformat the data to get counts
+    #grupos
     df_cat = df_cat.groupby(['cardio', 'variable', 'value']).size().reset_index(name='total')
 
     # 7. Draw the catplot using seaborn. Use a bar plot of counts (total).
@@ -51,10 +51,10 @@ def draw_cat_plot():
         col='cardio'
     )
 
-    # 8. Get the figure for the output and store it in the fig variable
+    
     fig = catplot.fig
 
-    # Do not modify the next two lines
+  
     return fig
 
 
@@ -62,32 +62,32 @@ def draw_heat_map():
     """Cleans the data, calculates correlations and draws the heatmap.
     Returns the matplotlib Figure object containing the heatmap.
     """
-    # 1. Clean the data
+    # limpieza de data
     df_heat = df.copy()
 
-    # Keep only the rows where ap_lo <= ap_hi
+    
     df_heat = df_heat[df_heat['ap_lo'] <= df_heat['ap_hi']]
 
-    # Keep height between 2.5th and 97.5th percentiles
+    # alturas
     height_low = df_heat['height'].quantile(0.025)
     height_high = df_heat['height'].quantile(0.975)
     df_heat = df_heat[(df_heat['height'] >= height_low) & (df_heat['height'] <= height_high)]
 
-    # Keep weight between 2.5th and 97.5th percentiles
+    # pesos
     weight_low = df_heat['weight'].quantile(0.025)
     weight_high = df_heat['weight'].quantile(0.975)
     df_heat = df_heat[(df_heat['weight'] >= weight_low) & (df_heat['weight'] <= weight_high)]
 
-    # 2. Calculate the correlation matrix
+    # calcular correlacion
     corr = df_heat.corr()
 
-    # 3. Generate a mask for the upper triangle
+    
     mask = np.triu(np.ones_like(corr, dtype=bool))
 
-    # 4. Set up the matplotlib figure
+
     fig, ax = plt.subplots(figsize=(12, 10))
 
-    # 5. Draw the heatmap with seaborn
+    # 5. mapa de calor
     sns.heatmap(
         corr,
         mask=mask,
@@ -100,12 +100,12 @@ def draw_heat_map():
         cbar_kws={"shrink": 0.5}
     )
 
-    # Do not modify the next two lines
+   
     return fig
 
 
 if __name__ == '__main__':
-    # Example usage: save the figures to files
+  
     fig_cat = draw_cat_plot()
     fig_cat.savefig('catplot.png')
 
