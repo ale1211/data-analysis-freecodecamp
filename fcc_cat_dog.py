@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/github/freeCodeCamp/boilerplate-cat-and-dog-image-classifier/blob/master/fcc_cat_dog.ipynb
 """
 
-# Commented out IPython magic to ensure Python compatibility.
+
 try:
   # This command only in Colab.
 #   %tensorflow_version 2.x
@@ -23,7 +23,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Get project files
+# 
 !wget https://cdn.freecodecamp.org/project-data/cats-and-dogs/cats_and_dogs.zip
 
 !unzip cats_and_dogs.zip
@@ -34,7 +34,7 @@ train_dir = os.path.join(PATH, 'train')
 validation_dir = os.path.join(PATH, 'validation')
 test_dir = os.path.join(PATH, 'test')
 
-# Get number of files in each directory. The train and validation directories
+
 # each have the subdirecories "dogs" and "cats".
 total_train = sum([len(files) for r, d, files in os.walk(train_dir)])
 total_val = sum([len(files) for r, d, files in os.walk(validation_dir)])
@@ -77,7 +77,7 @@ validation_data_gen = validation_image_generator.flow_from_directory(
     class_mode="binary"
 )
 
-# IMPORTANT: test folder has NO subfolders, so we must use class_mode=None
+# IMPORTANT
 test_data_gen = test_image_generator.flow_from_directory(
     TEST_DIR,
     target_size=(IMG_HEIGHT, IMG_WIDTH),
@@ -86,7 +86,7 @@ test_data_gen = test_image_generator.flow_from_directory(
     class_mode=None
 )
 
-# 4
+# 
 def plotImages(images_arr, probabilities = False):
     fig, axes = plt.subplots(len(images_arr), 1, figsize=(5,len(images_arr) * 3))
     if probabilities is False:
@@ -129,7 +129,7 @@ augmented_images = [train_data_gen[0][0][0] for i in range(5)]
 
 plotImages(augmented_images)
 
-# 7
+#
 # 7
 model = tf.keras.models.Sequential([
     Conv2D(32, (3,3), activation='relu', input_shape=(IMG_HEIGHT, IMG_WIDTH, 3)),
@@ -195,10 +195,10 @@ plt.show()
 test_data_gen.reset()
 preds = model.predict(test_data_gen)
 
-# Convertir probabilidades a enteros (0 = cat, 1 = dog)
+# Convertir (0 = cat, 1 = dog)
 probabilities = [int(round(p[0])) for p in preds]
 
-# Mostrar imágenes con sus probabilidades
+# Mostrar 
 plotImages([test_data_gen[i][0] for i in range(len(probabilities))], probabilities)
 
 
