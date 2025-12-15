@@ -11,13 +11,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# 1. Import data from CSV and set index to date column
+# 1. Import data 
 
-# Ahora usa el archivo simulado
+
 df = pd.read_csv('fcc-forum-pageviews-simulated.csv', parse_dates=['date'], index_col='date')
 
 
-# 2. Clean data: remove top 2.5% and bottom 2.5%
+# Clean data
 low_quantile = df['value'].quantile(0.025)
 high_quantile = df['value'].quantile(0.975)
 df = df[(df['value'] >= low_quantile) & (df['value'] <= high_quantile)]
@@ -39,7 +39,7 @@ def draw_bar_plot():
     df_bar['year'] = df_bar.index.year
     df_bar['month'] = df_bar.index.month
 
-    # Group by year and month and take mean
+    
     df_bar_grouped = df_bar.groupby(['year','month'])['value'].mean().unstack()
 
     # Plot bar chart
@@ -50,7 +50,7 @@ def draw_bar_plot():
     fig.savefig('bar_plot.png')
     return fig
 
-# Function to draw box plots
+
 def draw_box_plot():
     # Prepare data
     df_box = df.copy()
@@ -59,18 +59,18 @@ def draw_box_plot():
     df_box['month'] = df_box['date'].dt.month_name()
     df_box['month_num'] = df_box['date'].dt.month
 
-    # Sort months by number
+    
     df_box = df_box.sort_values('month_num')
 
     fig, axes = plt.subplots(1, 2, figsize=(18,6))
 
-    # Year-wise Box Plot (Trend)
+    
     sns.boxplot(x='year', y='value', data=df_box, ax=axes[0])
     axes[0].set_title('Year-wise Box Plot (Trend)')
     axes[0].set_xlabel('Year')
     axes[0].set_ylabel('Page Views')
 
-    # Month-wise Box Plot (Seasonality)
+    
     sns.boxplot(x='month', y='value', data=df_box, ax=axes[1])
     axes[1].set_title('Month-wise Box Plot (Seasonality)')
     axes[1].set_xlabel('Month')
